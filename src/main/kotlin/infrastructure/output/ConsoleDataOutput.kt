@@ -6,26 +6,40 @@ import org.example.entities.InternalHardDisk
 
 // Реализация вывода данных
 class ConsoleDataOutput : DataOutput {
-    override fun displayHighCapacityDisks(disks: List<HardDisk>) {
-        val highCapacityDisks = disks.filter { it.isHighCapacity() }
 
-        println("\n=== Диски ёмкостью более 200 ГБ ===")
-        if (highCapacityDisks.isEmpty()) {
+    fun displayFilteredDisks(
+        disks: List<HardDisk>,
+        filter: (HardDisk) -> Boolean,
+        title: String = "Отфильтрованные диски"
+    ) {
+        val filteredDisks = disks.filter(filter)
+
+        println("\n=== $title ===")
+        if (filteredDisks.isEmpty()) {
             println("Диски не найдены")
         } else {
-            highCapacityDisks.forEach { disk ->
+            filteredDisks.forEach { disk ->
                 println("- ${disk.getDescription()}")
             }
         }
 
-        // Дополнительная статистика
+        // Общая статистика
         println("\n=== Статистика ===")
         println("Всего дисков: ${disks.size}")
-        println("Высокоёмких дисков (>200 ГБ): ${highCapacityDisks.size}")
+        println("Отобрано дисков: ${filteredDisks.size}")
 
         val externalCount = disks.count { it is ExternalHardDisk }
         val internalCount = disks.count { it is InternalHardDisk }
         println("Внешних дисков: $externalCount")
         println("Внутренних дисков: $internalCount")
+    }
+
+    // Для совместимости — старый метод, использующий стандартный фильтр
+    override fun displayHighCapacityDisks(disks: List<HardDisk>) {
+        displayFilteredDisks(
+            disks,
+            filter = { it.isHighCapacity() },
+            title = "Диски ёмкостью более 200 ГБ"
+        )
     }
 }
