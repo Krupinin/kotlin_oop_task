@@ -2,15 +2,14 @@ package org.example.entities
 
 import org.example.interfaces.ProtectionFeature
 
-// Класс внешнего диска
 class ExternalHardDisk(
     name: String,
     capacityGB: Int,
-    override val hasDropProtection: Boolean
+    override val hasDropProtection: Boolean,
+    private val descriptionFormatter: ExternalHardDiskDescriptionFormatter = ExternalHardDiskDescriptionFormatter()
 ) : HardDisk(name, capacityGB), ProtectionFeature {
 
     override fun getDescription(): String {
-        val protectionStatus = if (hasDropProtection) "с защитой от падения" else "без защиты от падения"
-        return "Внешний диск '$name' ($capacityGB ГБ) $protectionStatus"
+        return descriptionFormatter.format(this)
     }
 }

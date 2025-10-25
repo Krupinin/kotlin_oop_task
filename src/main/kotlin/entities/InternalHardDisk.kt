@@ -2,11 +2,11 @@ package org.example.entities
 
 import org.example.interfaces.SizeFeature
 
-// Класс внутреннего диска
 class InternalHardDisk(
     name: String,
     capacityGB: Int,
-    override val size: String
+    override val size: String,
+    private val descriptionFormatter: InternalHardDiskDescriptionFormatter = InternalHardDiskDescriptionFormatter()
 ) : HardDisk(name, capacityGB), SizeFeature {
 
     init {
@@ -14,6 +14,6 @@ class InternalHardDisk(
     }
 
     override fun getDescription(): String {
-        return "Внутренний диск '$name' ($capacityGB ГБ) размер $size"
+        return descriptionFormatter.format(this)
     }
 }
